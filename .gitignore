@@ -1,0 +1,85 @@
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## User settings
+xcuserdata/
+
+## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+*.xcscmblueprint
+*.xccheckout
+
+## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
+build/
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+## Xcode Patch
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
+
+
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+
+# Exclude subprojects from cache
+
+subprojects/bcg729*
+# subprojects/
+
+.mypy_cache/
+/.project
+/.pydevproject
+/.settings
+/.cproject
+/.idea
+/.vscode
+
+__pycache__
+.coverage
+/install dir
+/work area
+
+/meson-test-run.txt
+/meson-test-run.xml
+/meson-cross-test-run.txt
+/meson-cross-test-run.xml
+
+.DS_Store
+*~
+*.swp
+packagecache
+/MANIFEST
+/build
+/buildir
+/dist
+/meson.egg-info
+
+/docs/built_docs
+/docs/hotdoc-private*
+
+*.pyc
+
+/subprojects
+!/subprojects/*.wrap

@@ -1,0 +1,9 @@
+version: '2'
+services:
+  g729-codec-service:
+    image: g729-codec-service:latest
+    build: ../../
+    ports:
+      - "4100:4100"
+    environment:
+      - WEBSOCKET_SERVER_PORT=4100
