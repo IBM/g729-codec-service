@@ -1,0 +1,10 @@
+[wrap-file]
+directory = uWebSockets-0.16.0a6
+
+source_url = https://github.com/uNetworking/uWebSockets/archive/v0.16.0a6.tar.gz
+source_filename = uWebSockets-0.16.0a6.tar.gz
+source_hash = 4005037904547072f8984c65ebc67787181a9a4e6372c80c24098e86f12ed1f7
+
+patch_url = https://fake.url.to.please.meson.but.file.in.packagecache/
+patch_filename = local-uWebSockets-0.16.0a6-wrap.zip
+patch_hash = edf715807769d0459310a70927a0caa894db1b39803a49e4a0bbb5aedad6c85e

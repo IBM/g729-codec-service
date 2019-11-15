@@ -1,0 +1,5 @@
+[wrap-git]
+directory = spdlog-1.3.1
+
+url = https://github.com/gabime/spdlog.git
+revision = bb7420fc222ace7a4376a63faf64c53fe5aa8cd4

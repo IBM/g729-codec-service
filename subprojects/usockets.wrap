@@ -1,0 +1,10 @@
+[wrap-file]
+directory = uSockets-0.3.1
+
+source_url = https://github.com/uNetworking/uSockets/archive/v0.3.1.tar.gz
+source_filename = uSockets-0.3.1.tar.gz
+source_hash = 2f247a82b172fd21f924807883630ec292444d4cb7e64a03695a4fa5e2789473
+
+patch_url = https://fake.url.to.please.meson.but.file.in.packagecache/
+patch_filename = local-uSockets-0.3.1-wrap.tar.gz
+patch_hash = 4d46b6558d123ebaeed062bed8ed5262262a61f8f1b9f1838e477bdad3f2efdc
