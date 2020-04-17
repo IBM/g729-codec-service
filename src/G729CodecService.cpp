@@ -59,6 +59,10 @@ struct PerSocketData {
   std::string * sessionId;
 };
 
+struct WebSocketServerBehaviorOptions {
+  int idleTimeout;
+};
+
 std::string capabilities;
 
 
@@ -90,12 +94,12 @@ std::string loadDefaultCapabilities(bool annexb) {
 }
 
 template <typename App>
-void addWebSocketBehavior(App *server, std::string pattern) {
+void addWebSocketBehavior(App *server, std::string pattern, WebSocketServerBehaviorOptions behaviorOptions) {
   typename App::WebSocketBehavior behavior = {};
   bool annexbEnabled = isAnnexBEnabled();
 
   capabilities = loadDefaultCapabilities(annexbEnabled);
-  behavior.idleTimeout = 30;
+  behavior.idleTimeout = behaviorOptions.idleTimeout;
   behavior.compression = uWS::SHARED_COMPRESSOR;
   behavior.maxPayloadLength = 16 * 1024;
   behavior.open = [](auto *ws, auto *req) {
@@ -230,19 +234,19 @@ void addWebSocketBehavior(App *server, std::string pattern) {
 template <typename AppType> class G729CodecService {
 private:
   AppType *wsApp;
-  void init() { addWebSocketBehavior<AppType>(wsApp, "/*"); }
+  void init(WebSocketServerBehaviorOptions behaviorOptions) { addWebSocketBehavior<AppType>(wsApp, "/*", behaviorOptions); }
 
 public:
-  G729CodecService() {
+  G729CodecService(WebSocketServerBehaviorOptions behaviorOptions) {
     wsApp = new AppType();
-    init();
+    init(behaviorOptions);
   }
-  G729CodecService(TLSOptions *options) {
+  G729CodecService(WebSocketServerBehaviorOptions behaviorOptions, TLSOptions *options) {
     wsApp = new AppType({
       .key_file_name = options->keyFileName.c_str(),
       .cert_file_name = options->certFileName.c_str()
     });
-    init();
+    init(behaviorOptions);
   };
 
   G729CodecService &&listen(std::string host, int port) {
@@ -268,11 +272,14 @@ int main() {
 
   NetworkOptions networkOptions = generateNetworkOptions();
   TLSOptions * tlsOptions = getTLSOptions();
+  WebSocketServerBehaviorOptions behaviorOptions = {
+    networkOptions.idleTimeout,
+  };
   if (tlsOptions->enabled) {
-    auto * service = new G729CodecService<uWS::SSLApp>(tlsOptions);
+    auto * service = new G729CodecService<uWS::SSLApp>(behaviorOptions, tlsOptions);
     service->listen(networkOptions.addr, networkOptions.port).run();
   } else {
-    auto * service = new G729CodecService<uWS::App>();
+    auto * service = new G729CodecService<uWS::App>(behaviorOptions);
     service->listen(networkOptions.addr, networkOptions.port).run();
   }
 }

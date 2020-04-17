@@ -70,6 +70,7 @@ Configuration is done through specification of environment variables.
 | `WEBSOCKET_SERVER_HOST` | `0.0.0.0` | Specifies the host interface to listen on for WebSocket requests. |
 | `WEBSOCKET_SERVER_CERT_FILE_NAME` | `N/A` | Path to certificate file that will be used for secure websocket requests. |
 | `WEBSOCKET_SERVER_KEY_FILE_NAME` | `N/A` | Path to key that will be used for secure websoket server requests. |
+| `WEBSOCKET_SERVER_IDLE_TIMEOUT` | `600` | Specifies the amount of time in seconds to wait between WebSocket connection messages before closing down the connection.|
 | `LOG_LEVEL` | `INFO` | Specifies the log level. Valid values are `TRACE`, `DEBUG`, `INFO`, `WARN` and `OFF`. |
 | `ANNEXB_ENABLED` | `YES` | Specifies if annexb should be used for the codec. |
 

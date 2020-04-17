@@ -22,14 +22,16 @@
 
 const std::string defaultAddress = "0.0.0.0";
 const int defaultPort = 9001;
+const int defaultIdleTimeout = 600; // Seconds
 
 struct NetworkOptions {
   std::string addr;
   int port;
+  int idleTimeout;
 };
 
 NetworkOptions generateNetworkOptions() {
-  NetworkOptions networkOptions = {defaultAddress, defaultPort};
+  NetworkOptions networkOptions = {defaultAddress, defaultPort, defaultIdleTimeout};
 
   if (const char *websocketServerHost = std::getenv("WEBSOCKET_SERVER_HOST")) {
     networkOptions.addr = websocketServerHost;
@@ -41,6 +43,10 @@ NetworkOptions generateNetworkOptions() {
 
   if (const char *port = std::getenv("WEBSOCKET_SERVER_PORT")) {
     networkOptions.port = (int)std::strtol(port, NULL, 10);
+  }
+
+  if (const char *idleTimeout = std::getenv("WEBSOCKET_SERVER_IDLE_TIMEOUT")) {
+    networkOptions.idleTimeout = (int) std::strtol(idleTimeout, NULL, 10);
   }
 
   return networkOptions;
