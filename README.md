@@ -51,7 +51,7 @@ To build as a docker container, you can follow the steps:
     ```
 2. Run the `docker build` command:
     ```
-    doker build -t g729-codec-service .
+    docker build -t g729-codec-service .
     ```
 3. Startup the container:
     ```
