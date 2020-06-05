@@ -31,6 +31,11 @@ RUN ~/.local/bin/meson --buildtype=release build && cd build \
 
 ENV LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
 
+# Install tini
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 RUN useradd -u 1001 -r -g 0 -s /sbin/nologin default \
     && mkdir -p /home/default \
     && chown -R 1001:0 /home/default \
@@ -38,6 +43,9 @@ RUN useradd -u 1001 -r -g 0 -s /sbin/nologin default \
 RUN mkdir /licenses
 COPY LICENSE /licenses
 USER 1001
-ENTRYPOINT [ "/usr/local/bin/g729-codec-service" ]
+
+ENTRYPOINT ["/tini", "--"]
+
+CMD [ "/usr/local/bin/g729-codec-service" ]
 
 
