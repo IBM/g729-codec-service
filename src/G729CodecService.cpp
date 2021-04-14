@@ -225,8 +225,8 @@ void addWebSocketBehavior(App *server, std::string pattern, WebSocketServerBehav
     if (perSocketData->processing) {
       logger->trace("deleting audio processor");
       delete perSocketData->audioProcessor;
-      delete perSocketData->sessionId;
     }
+    delete perSocketData->sessionId;
   };
   server->template ws<PerSocketData>(pattern, std::move(behavior));
 }
