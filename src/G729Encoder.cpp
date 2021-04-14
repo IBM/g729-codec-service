@@ -26,6 +26,8 @@
 int encode_g729_frame(bcg729EncoderChannelContextStruct *encoderChannelContext, int16_t * pcm, int frameSize, uint8_t * data) {
     int numberOfEncodingFrames = frameSize / FRAME_SIZE;
     int totalSize = 0;
+
+    data = new uint8_t[numberOfEncodingFrames * MAX_ENCODER_OUTPUT]();
     // 160 samples
     // 2 frames to decode
     // each frame has 80 samples, each sample is 16 bits (2 bytes)
@@ -50,19 +52,18 @@ G729Encoder::~G729Encoder() {
 }
 
 void G729Encoder::processFrame(AudioFrame& inputFrame, AudioFrame& outputFrame) {
-    int samples = inputFrame.size / 2;
-    uint8_t * g729_frames = new uint8_t[samples * MAX_ENCODER_OUTPUT]();
-    int byteSize = encode_g729_frame(encoderContext, (int16_t *) inputFrame.data, samples, g729_frames);
+    int frameSize = inputFrame.size / 2;
+    uint8_t * g729_frames;
+    int byteSize = encode_g729_frame(encoderContext, (int16_t *) inputFrame.data, frameSize, g729_frames);
     outputFrame.data = (int8_t *) g729_frames;
     outputFrame.size = byteSize;
 }
 
 
 void G729Encoder::processFrame(AudioFrame& inputFrame, AudioFrame& outputFrame, VADEvent &vadEvent) {
-
-    int samples = inputFrame.size / 2;
-    uint8_t * g729_frames = new uint8_t[samples * MAX_ENCODER_OUTPUT]();
-    int byteSize = encode_g729_frame(encoderContext, (int16_t *) inputFrame.data, samples, g729_frames);
+    int frameSize = inputFrame.size / 2;
+    uint8_t * g729_frames;
+    int byteSize = encode_g729_frame(encoderContext, (int16_t *) inputFrame.data, frameSize, g729_frames);
     vadEvent = VADEvent::NONE;
     if (byteSize >= 2 && byteSize <= 12) {
       if (voiceActive) {

@@ -1,10 +1,10 @@
 [wrap-file]
-directory = bcg729-1.0.4
+directory = bcg729-1.1.0
 
-source_url = https://github.com/BelledonneCommunications/bcg729/archive/1.0.4.tar.gz
-source_filename = bcg729-1.0.4.tar.gz
-source_hash = 94b3542a06cbd96306efc19f959f9febae62806a22599063f82a8c33e989d48b
+source_url = https://github.com/BelledonneCommunications/bcg729/archive/1.1.0.tar.gz
+source_filename = bcg729-1.1.0.tar.gz
+source_hash = 248e54319dc706f9413bcd43fa23c2d7fbe7e67a3b4e4fdcb983e484898c62e3
 
 patch_url = https://fake.url.to.please.meson.but.file.in.packagecache/
-patch_filename = local-bcg729-1.0.4-wrap.tar.gz
-patch_hash = 05710f17ff99b9a64e3204bca9b46a6aa450625cd6e7a9a01d4e836c2be4589a
+patch_filename = local-bcg729-1.1.0-wrap.tar.gz
+patch_hash = 83c8b83f3f79ba57fc2a99e82a8defce851cd81eb4acc4dc194b382cfa550517
