@@ -1,4 +1,4 @@
-project('g729-codec-service','c', 'cpp', version: '0.0.2', default_options : ['c_std=c17', 'cpp_std=c++17'])
+project('g729-codec-service','c', 'cpp', version: '0.0.5', default_options : ['c_std=c17', 'cpp_std=c++17'])
 usockets = subproject('usockets')
 rapidjson = subproject('rapidjson')
 uwebsockets = subproject('uwebsockets')
