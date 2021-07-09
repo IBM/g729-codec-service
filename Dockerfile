@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/ubi
 
 RUN yum update --disableplugin=subscription-manager -y && \
     yum install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel zip && \
-    yum install --disableplugin=subscription-manager curl make automake autoconf libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
+    yum install --disableplugin=subscription-manager libasan libubsan curl gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
     yum clean all && \
     rm -rf /var/cache/yum
 

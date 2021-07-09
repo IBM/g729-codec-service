@@ -1,4 +1,11 @@
 project('g729-codec-service','c', 'cpp', version: '0.0.2', default_options : ['c_std=c17', 'cpp_std=c++17'])
+
+#add_global_arguments('-fsanitize=address', language : 'c')
+#add_global_arguments('-fsanitize=address', language : 'cpp')
+
+#add_global_link_arguments('-fsanitize=address', language : 'cpp')
+#add_global_link_arguments('-fsanitize=address', language : 'c')
+
 usockets = subproject('usockets')
 rapidjson = subproject('rapidjson')
 uwebsockets = subproject('uwebsockets')
@@ -40,8 +47,7 @@ executable('g729-codec-service',
 'src/TLSOptions.hpp',
 'src/LogUtils.hpp',
 dependencies: [bcg729_dep, librapidjson, usockets_dep, uwebsockets_dep, zlib_dep, spdlog_dep],
-install: true
-)
+install: true)
 
 # inc = include_directories('src')
 # executable('tests',

@@ -23,15 +23,14 @@
 # define MAX_DECODER_INPUT 10
 # define MAX_BIT_STREAM_SIZE 10
 
-void decode_g729(bcg729DecoderChannelContextStruct *decoderContext, uint8_t * g729, int length, int16_t * pcm) {
-    int numberOfDecoderPayloads = length / MAX_DECODER_INPUT;
+void decode_g729(bcg729DecoderChannelContextStruct *decoderContext, uint8_t * g729, int numberOfDecoderFrames, int payloadLength, int16_t * pcm) {
 
-    int remainingPacketLength = length;
+    int remainingPacketLength = payloadLength;
     uint8_t frameErased = 0;
     uint8_t sidFrame = 0;
     int bitStreamSize = MAX_BIT_STREAM_SIZE;
 
-    for (int i = 0; i < numberOfDecoderPayloads; i++) {
+    for (int i = 0; i < numberOfDecoderFrames; i++) {
         if (remainingPacketLength >= MAX_BIT_STREAM_SIZE) {
             bitStreamSize = MAX_BIT_STREAM_SIZE;
         } else if (remainingPacketLength == 2) {
@@ -59,16 +58,20 @@ G729Decoder::~G729Decoder() {
 
 void G729Decoder::processFrame(AudioFrame& inputFrame, AudioFrame& outputFrame) {
     int sizeInBytes = inputFrame.size;
-    int16_t * pcm = new int16_t[FRAME_SIZE * 2]();
-    decode_g729(decoderContext, (uint8_t *) inputFrame.data, sizeInBytes, pcm);
+    int numberOfG729Frames = sizeInBytes / MAX_DECODER_INPUT;
+
+    int16_t * pcm = new int16_t[FRAME_SIZE * numberOfG729Frames]();
+    decode_g729(decoderContext, (uint8_t *) inputFrame.data, numberOfG729Frames, sizeInBytes,  pcm);
     outputFrame.data = (int8_t *) pcm;
-    outputFrame.size = (FRAME_SIZE) * 4;
+    outputFrame.size = (FRAME_SIZE) * numberOfG729Frames * 2;
 }
 
 void G729Decoder::processFrame(AudioFrame& inputFrame, AudioFrame& outputFrame, VADEvent &vadEvent) {
     int sizeInBytes = inputFrame.size;
+    int numberOfG729Frames = sizeInBytes / MAX_DECODER_INPUT;
+
     spdlog::trace("got frame of length = {}", sizeInBytes);
-    if (sizeInBytes == 20 && !voiceActive) {
+    if (sizeInBytes >= 20 && !voiceActive) {
       vadEvent = VADEvent::START_OF_SPEECH;
       voiceActive = true;
               spdlog::debug("speech started");
@@ -81,9 +84,9 @@ void G729Decoder::processFrame(AudioFrame& inputFrame, AudioFrame& outputFrame, 
     } else {
       vadEvent = VADEvent::NONE;
     }
-    int16_t * pcm = new int16_t[FRAME_SIZE * 2]();
-    decode_g729(decoderContext, (uint8_t *) inputFrame.data, sizeInBytes, pcm);
+    int16_t * pcm = new int16_t[FRAME_SIZE * numberOfG729Frames]();
+    decode_g729(decoderContext, (uint8_t *) inputFrame.data, numberOfG729Frames, sizeInBytes, pcm);
     outputFrame.data = (int8_t *) pcm;
-    outputFrame.size = (FRAME_SIZE) * 4;
+    outputFrame.size = (FRAME_SIZE) * numberOfG729Frames * 2;
     spdlog::trace("generated frame of size = {}", outputFrame.size);
 }
