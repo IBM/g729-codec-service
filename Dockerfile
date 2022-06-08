@@ -1,10 +1,10 @@
-FROM registry.access.redhat.com/ubi8/ubi
+FROM registry.access.redhat.com/ubi8/ubi-minimal
 
-RUN yum update --disableplugin=subscription-manager -y && \
-    yum install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel zip && \
-    yum install --disableplugin=subscription-manager libasan libubsan curl gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN microdnf --nodocs update --disableplugin=subscription-manager -y && \
+    microdnf --nodocs install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel zip && \
+    microdnf --nodocs install --disableplugin=subscription-manager libasan libubsan curl gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
+    microdnf clean all && \
+    rm -rf /var/cache/microdnf
 
 # Set password length and expiry for compliance with vulnerability advisor
 RUN sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs && \
@@ -47,5 +47,3 @@ USER 1001
 ENTRYPOINT ["/tini", "--"]
 
 CMD [ "/usr/local/bin/g729-codec-service" ]
-
-
