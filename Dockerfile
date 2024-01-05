@@ -1,8 +1,8 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM registry.access.redhat.com/ubi9/ubi-minimal
 
 RUN microdnf --nodocs update --disableplugin=subscription-manager -y && \
-    microdnf --nodocs install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel zip && \
-    microdnf --nodocs install --disableplugin=subscription-manager libasan libubsan curl gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
+    microdnf --nodocs install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel && \
+    microdnf --nodocs install --disableplugin=subscription-manager libasan libubsan gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
     microdnf clean all && \
     rm -rf /var/cache/microdnf
 
@@ -11,9 +11,7 @@ RUN sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs && \
     sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS    1/' /etc/login.defs && \
     echo 'minlen = 9' >> /etc/security/pwquality.conf
 
-ADD https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip .
-
-RUN unzip ninja-linux && cp ninja /usr/local/bin
+RUN pip3 install ninja
 
 RUN pip3 install --user meson
 
