@@ -32,9 +32,11 @@ ENV LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
 COPY --from=builder /etc/login.defs /etc/login.defs
 COPY --from=builder /etc/security/pwquality.conf /etc/security/pwquality.conf
 COPY --from=builder /usr/local/bin/g729-codec-service /usr/local/bin/g729-codec-service
-COPY --from=builder /usr/local/lib64/libbcg729.so /usr/local/lib64
-COPY --from=builder /usr/local/lib64/libusockets.so /usr/local/lib64
-COPY --from=builder /usr/local/lib64/libz.so /usr/local/lib64
+
+# Copy required runtime libraries
+COPY --from=builder /usr/local/lib64/libbcg729.so /usr/local/lib64/libbcg729.so
+COPY --from=builder /usr/local/lib64/libusockets.so /usr/local/lib64/libusockets.so
+COPY --from=builder /usr/local/lib64/libz.so /usr/local/lib64/libz.so
 COPY --from=builder /usr/lib64/libstdc++.so.6 /usr/lib64/libstdc++.so.6
 COPY --from=builder /usr/lib64/libssl.so.3 /usr/lib64/libssl.so.3
 COPY --from=builder /usr/lib64/libcrypto.so.3 /usr/lib64/libcrypto.so.3
