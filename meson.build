@@ -1,4 +1,4 @@
-project('g729-codec-service','c', 'cpp', version: '0.0.2', default_options : ['c_std=c17', 'cpp_std=c++17'])
+project('g729-codec-service','c', 'cpp', version: '0.0.9', default_options : ['c_std=c17', 'cpp_std=c++17'])
 
 #add_global_arguments('-fsanitize=address', language : 'c')
 #add_global_arguments('-fsanitize=address', language : 'cpp')
