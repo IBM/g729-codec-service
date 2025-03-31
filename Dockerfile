@@ -1,8 +1,7 @@
-FROM registry.access.redhat.com/ubi9/ubi-minimal
+FROM registry.access.redhat.com/ubi9/ubi-minimal AS builder
 
 RUN microdnf --nodocs update --disableplugin=subscription-manager -y && \
-    microdnf --nodocs install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel && \
-    microdnf --nodocs install --disableplugin=subscription-manager libasan libubsan gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
+    microdnf --nodocs install --disableplugin=subscription-manager -y git python3 python3-pip python3-setuptools python3-wheel libasan libubsan gdb make automake autoconf procps libuv pkgconfig sudo file gcc gcc-c++ openssl-devel -y && \
     microdnf clean all && \
     rm -rf /var/cache/microdnf
 
@@ -15,7 +14,7 @@ RUN pip3 install ninja
 
 RUN pip3 install --user meson
 
-ENV PATH $PATH:~/.local/bin
+ENV PATH=$PATH:~/.local/bin
 
 WORKDIR /opt/g729-codec-service/
 
@@ -27,14 +26,29 @@ RUN ~/.local/bin/meson --buildtype=release build && cd build \
 	&& ninja \
 	&& ninja install
 
+FROM registry.access.redhat.com/ubi9/ubi-micro
+
 ENV LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
+COPY --from=builder /etc/login.defs /etc/login.defs
+COPY --from=builder /etc/security/pwquality.conf /etc/security/pwquality.conf
+COPY --from=builder /usr/local/bin/g729-codec-service /usr/local/bin/g729-codec-service
+
+# Copy required runtime libraries
+COPY --from=builder /usr/local/lib64/libbcg729.so /usr/local/lib64/libbcg729.so
+COPY --from=builder /usr/local/lib64/libusockets.so /usr/local/lib64/libusockets.so
+COPY --from=builder /usr/local/lib64/libz.so /usr/local/lib64/libz.so
+COPY --from=builder /usr/lib64/libstdc++.so.6 /usr/lib64/libstdc++.so.6
+COPY --from=builder /usr/lib64/libssl.so.3 /usr/lib64/libssl.so.3
+COPY --from=builder /usr/lib64/libcrypto.so.3 /usr/lib64/libcrypto.so.3
+COPY --from=builder /usr/lib64/libz.so.1 /usr/lib64/libz.so.1
 
 # Install tini
-ENV TINI_VERSION v0.18.0
+ENV TINI_VERSION=v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
-RUN useradd -u 1001 -r -g 0 -s /sbin/nologin default \
+RUN echo 'default:x:1001:0::/home/default:/sbin/nologin' >> /etc/passwd \
+    && echo 'default:*:::::::' >> /etc/shadow \
     && mkdir -p /home/default \
     && chown -R 1001:0 /home/default \
     && chmod -R g+rw /home/default
